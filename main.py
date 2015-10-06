@@ -12,6 +12,8 @@ def main():
     # Init
     c = wmi.WMI()
     shell = win32com.client.Dispatch("WScript.Shell")
+    activation_exe = "ActivationUI.exe"
+    config_exe = "fifaconfig.exe"
 
     # Detecting fifa executable
     print "Looking for FIFA executable..."
@@ -35,7 +37,7 @@ def main():
     config_process = None
     print("Waiting for config/launcher to load...")
     while len(config_hwnds) != 1:
-        for process in c.Win32_Process(name="fifaconfig.exe"):
+        for process in c.Win32_Process(name=config_exe):
             config_hwnds = get_hwnds_for_pid(process.ProcessID)
             config_process = process
 
@@ -46,10 +48,17 @@ def main():
     # Send an 'Enter' keypress
     shell.SendKeys('{ENTER}', 0)
 
-    print("Waiting for FIFA to load...")
-    # Wait for FIFA proper to load, then kill the config/launcher
+    print("Waiting for activation to finish...")
+    # Wait for FIFA to activate, then kill the config/launcher
     while True:
-        if len(c.Win32_Process(name=fifa_exe)) > 0:
+        for process in c.Win32_Process(name=activation_exe):
+            watcher = c.watch_for (
+                notification_type="Deletion",
+                wmi_class="Win32_Process",
+                delay_secs=1,
+                ProcessId=process.ProcessID
+            )
+            watcher()
             print "Killing config/launcher..."
             config_process.Terminate()
 
