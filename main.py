@@ -52,7 +52,7 @@ def main():
     # Wait for FIFA to activate, then kill the config/launcher
     while True:
         for process in c.Win32_Process(name=activation_exe):
-            watcher = c.watch_for (
+            watcher = c.watch_for(
                 notification_type="Deletion",
                 wmi_class="Win32_Process",
                 delay_secs=1,
