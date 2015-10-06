@@ -15,12 +15,12 @@ def main():
 
     # Detecting fifa executable
     print "Looking for FIFA executable..."
-    fifa_file = ""
+    fifa_exe = ""
     found_fifa = False
     for file in listdir('.'):
         if re.match('fifa[0-9]+.exe', file):
             found_fifa = True
-            fifa_file = path.join(path.dirname(__file__), file)
+            fifa_exe = file
 
     if not found_fifa:
         print "Unable to find FIFA executable, please run from the same directory as fifa*.exe"
@@ -28,7 +28,7 @@ def main():
 
     # Run FIFA config/launcher
     print("Running FIFA config/launcher...")
-    shell.run(fifa_file)
+    shell.run(path.join(path.dirname(__file__), fifa_exe))
 
     # Get the HWND and PID of FIFA config/launcher
     config_hwnds = []
@@ -49,7 +49,7 @@ def main():
     print("Waiting for FIFA to load...")
     # Wait for FIFA proper to load, then kill the config/launcher
     while True:
-        if len(c.Win32_Process(name=fifa_file)) > 0:
+        if len(c.Win32_Process(name=fifa_exe)) > 0:
             print "Killing config/launcher..."
             config_process.Terminate()
 
