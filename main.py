@@ -18,7 +18,6 @@ def main():
     fifa_file = ""
     found_fifa = False
     for file in listdir('.'):
-        print file
         if re.match('fifa[0-9]+.exe', file):
             found_fifa = True
             fifa_file = path.join(path.dirname(__file__), file)
