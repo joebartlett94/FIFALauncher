@@ -14,6 +14,7 @@ def main():
     shell = win32com.client.Dispatch("WScript.Shell")
 
     # Detecting fifa executable
+    print "Looking for FIFA executable..."
     fifa_file = ""
     found_fifa = False
     for file in listdir('.'):
@@ -27,13 +28,13 @@ def main():
         return 1
 
     # Run FIFA config/launcher
-    print("Running FIFA...")
+    print("Running FIFA config/launcher...")
     shell.run(fifa_file)
 
     # Get the HWND and PID of FIFA config/launcher
     config_hwnds = []
     config_process = None
-    print("Waiting for launcher to load...")
+    print("Waiting for config/launcher to load...")
     while len(config_hwnds) != 1:
         for process in c.Win32_Process(name="fifaconfig.exe"):
             config_hwnds = get_hwnds_for_pid(process.ProcessID)
@@ -42,13 +43,18 @@ def main():
     # Give FIFA config/launcher focus
     win32gui.SetForegroundWindow(config_hwnds[0])
 
+    print("Running FIFA...")
     # Send an 'Enter' keypress
     shell.SendKeys('{ENTER}', 0)
 
+    print("Waiting for FIFA to load...")
     # Wait for FIFA proper to load, then kill the config/launcher
     while True:
         if len(c.Win32_Process(name=fifa_file)) > 0:
+            print "Killing config/launcher..."
             config_process.Terminate()
+
+            print "All done. Cheers Jeff!"
             return 0
 
 
