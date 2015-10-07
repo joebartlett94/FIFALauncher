@@ -1,6 +1,6 @@
 """Runs FIFA's config/launcher, presses enter, then closes the launcher. Run from same dir as FIFA's executable"""
 
-from os import path, listdir
+import os
 import re
 import wmi
 import win32gui
@@ -19,18 +19,19 @@ def main():
     print "Looking for FIFA executable..."
     fifa_exe = ""
     found_fifa = False
-    for file in listdir('.'):
+    for file in os.listdir('.'):
         if re.match('fifa[0-9]+.exe', file):
             found_fifa = True
             fifa_exe = file
 
     if not found_fifa:
         print "Unable to find FIFA executable, please run from the same directory as fifa*.exe"
+        os.system("pause")
         return 1
 
     # Run FIFA config/launcher
     print("Running FIFA config/launcher...")
-    shell.run(path.join(path.dirname(__file__), fifa_exe))
+    shell.run(os.path.join(os.path.dirname(__file__), fifa_exe))
 
     # Get the HWND and PID of FIFA config/launcher
     config_hwnds = []
