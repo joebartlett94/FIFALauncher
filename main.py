@@ -12,7 +12,6 @@ def main():
     # Init
     c = wmi.WMI()
     shell = win32com.client.Dispatch("WScript.Shell")
-    activation_exe = "ActivationUI.exe"
     config_exe = "fifaconfig.exe"
 
     # Detecting fifa executable
@@ -49,10 +48,10 @@ def main():
     # Send an 'Enter' keypress
     shell.SendKeys('{ENTER}', 0)
 
-    print("Waiting for activation to finish...")
-    # Wait for FIFA to activate, then kill the config/launcher
+    print("Waiting for FIFA to quit...")
+    # When FIFA quits, kill the config/launcher
     while True:
-        for process in c.Win32_Process(name=activation_exe):
+        for process in c.Win32_Process(name=fifa_exe):
             watcher = c.watch_for(
                 notification_type="Deletion",
                 wmi_class="Win32_Process",
