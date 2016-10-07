@@ -19,7 +19,7 @@ def main():
     fifa_exe = ""
     found_fifa = False
     for file in os.listdir('.'):
-        if re.match('fifa[0-9]+.exe', file):
+        if re.match('fifa[0-9]+(demo)?.exe', file, re.IGNORECASE):
             found_fifa = True
             fifa_exe = file
 
